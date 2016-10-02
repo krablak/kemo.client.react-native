@@ -4,14 +4,15 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
-  ScrollView
+  ScrollView,
+  ListView
 } from 'react-native';
 
 export class NickTextInput extends Component {
   render() {
     const { value, onChange, placeholder } = this.props
     return (
-      <TextInput
+      <TextInput        
         style={{height: 40, borderColor: '#eeeeee', borderWidth: 1}}
         onChangeText={(text)=>{onChange(text)}}
         placeholder={placeholder}
@@ -46,13 +47,15 @@ export class Messages extends Component {
   constructor(props) {
     super(props);
   }
-
+  
   render() {
-    const {messages} = this.props
+    console.log("ANAL XXXXXX")
+    const {dataSource} = this.props
     return (
-      <ScrollView>
-        {messages.map((message)=> <Text>{message}</Text>)}
-      </ScrollView>
+      <ListView
+        dataSource={dataSource}
+        renderRow={(rowData) => <Text>{rowData}</Text>}
+      />
     );
   }
 }
@@ -75,8 +78,12 @@ export class MessageTextInput extends Component {
           onSend(this.state.text);
           this.setState({text:''});
         }}
-        onChangeText={(text) => this.setState({text:text})}
-        value={this.state.text}
+        onChangeText={
+          (text) => {
+            this.setState({text:text})            
+          }
+        }
+        value={this.state.text}        
       />
     );
   }
