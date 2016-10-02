@@ -1,11 +1,22 @@
+// React support
 import React, {Component} from 'react';
 import {TextInput,AppRegistry, StyleSheet,Text,View,ListView} from 'react-native';
 import {createStore as initialCreateStore, compose } from 'redux';
-import { Provider } from 'react-redux';
-import {Sample, NickTextInput, KeyTextInput, Messages, MessageTextInput, SendButton} from "./components.js";
-import {RECV, NICK_CHANGED, KEY_CHANGED, SEND} from "./actions.js";
 
-export let createStore = initialCreateStore;
+// UI components
+import NickTextInput from "./components/NickTextInput.js"
+import KeyTextInput from "./components/KeyTextInput.js"
+import MessageTextInput from "./components/MessageTextInput.js"
+import Messages from "./components/Messages.js"
+import SendButton from "./components/SendButton.js"
+
+// Actions
+import {RECV, NICK_CHANGED, KEY_CHANGED, SEND} from "./redux/actions.js";
+
+// Reducers
+import {newReducer} from "./redux/reducers.js"
+
+let createStore = initialCreateStore;
 
 // Application initial state
 const initialState = {
@@ -15,42 +26,13 @@ const initialState = {
   ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
 }
 
-// Global reducer updating state for given action
-function reducer(state = initialState, action) {
-  console.log("REDUCT: " + action.type);
-  switch (action.type) {
-    case RECV.type:
-      console.log(action.message);
-      return Object.assign({}, state, {messages: state.messages.concat(action.message)});
-    case NICK_CHANGED.type:
-        return Object.assign({}, state, {nick:action.nick});
-    case KEY_CHANGED.type:
-        return Object.assign({}, state, {key:action.key});
-    case SEND.type:     
-        let newMessages = state.messages.concat(action.message)
-        return Object.assign({}, state, 
-            {
-              messages: newMessages, 
-              ds: state.ds.cloneWithRows([newMessages])
-            }
-        )
-    default:
-      return state
-  }
-}
-
 // Action store
-const store = createStore(reducer);
+const store = createStore(newReducer(initialState));
 
-// Dispatch action
-store.dispatch(RECV.create("Hello 0!"))
-store.dispatch(RECV.create("Hello 1!"))
-store.dispatch(RECV.create("Hello 2!"))
-
-export class KemoApp extends Component {
-  
+export class KemoApp extends Component {  
   constructor(props) {
-    super(props);
+    super(props)
+    // Initiate state update and components rendering on store event
     store.subscribe(()=>this.setState(store.getState()))
   }
 
@@ -69,11 +51,11 @@ export class KemoApp extends Component {
       </View>
     )
   }
-  
-  componentWillUpdate(nextProps, object){
-    console.log("OOOO KemoApp.componentWillUpdate")
-  }  
-  componentDidUpdate() {
-    console.log("OOOO KemoApp.componentDidUpdate")
-  }
+
 }
+
+// Dispatch test devel actions
+store.dispatch(RECV.create("Hello 0!"))
+store.dispatch(RECV.create("Hello 1!"))
+store.dispatch(RECV.create("Hello 2!"))
+
