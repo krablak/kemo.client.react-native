@@ -1,6 +1,6 @@
 // React support
 import React, {Component} from 'react';
-import {TextInput,AppRegistry, StyleSheet,Text,View,ListView} from 'react-native';
+import {TextInput, AppRegistry, StyleSheet, View, ListView, KeyboardAvoidingView} from 'react-native';
 import {createStore as initialCreateStore, compose } from 'redux';
 
 // UI components
@@ -16,8 +16,6 @@ import {RECV, NICK_CHANGED, KEY_CHANGED, SEND} from "./redux/actions.js";
 // Reducers
 import {newReducer} from "./redux/reducers.js"
 
-let createStore = initialCreateStore;
-
 // Application initial state
 const initialState = {
   key: "key",
@@ -27,7 +25,7 @@ const initialState = {
 }
 
 // Action store
-const store = createStore(newReducer(initialState));
+const store = initialCreateStore(newReducer(initialState));
 
 export class KemoApp extends Component {  
   constructor(props) {
@@ -38,17 +36,24 @@ export class KemoApp extends Component {
 
   render() {
     return (
-      <View>
-        <Text>d</Text>
-        <Text>store: {store.getState().key}</Text>
-        <Text>store: {store.getState().nick}</Text>
-        <Text>store: {store.getState().messages.length}</Text>
-        <NickTextInput placeholder="💩" onChange={(nick)=>store.dispatch(NICK_CHANGED.create(nick))}/>
-        <KeyTextInput placeholder="default" onChange={(key)=>store.dispatch(KEY_CHANGED.create(key))}/>
-        <Messages dataSource={store.getState().ds}/>            
-        <MessageTextInput onSend={(message)=>store.dispatch(SEND.create(message))}/>
-        <SendButton/>
-      </View>
+        <KeyboardAvoidingView 
+            behavior="height"
+            keyboardVerticalOffset={0}
+            style={{flex: 10, flexDirection: 'column', paddingTop:30}}
+            >
+          <View style={{flex: 1, backgroundColor: 'powderblue'}}>
+            <NickTextInput placeholder="💩" onChange={(nick)=>store.dispatch(NICK_CHANGED.create(nick))}/>
+          </View>
+          <View style={{flex: 1, backgroundColor: 'skyblue'}}>
+            <KeyTextInput placeholder="Place your secret key here..." onChange={(key)=>store.dispatch(KEY_CHANGED.create(key))}/>
+          </View>
+          <View style={{flex: 6, flexDirection: "column"}}>
+            <Messages dataSource={store.getState().ds}/>
+          </View>
+          <View style={{flex: 1, backgroundColor: 'red', justifyContent:'flex-end'}}>
+            <MessageTextInput onSend={(message)=>store.dispatch(SEND.create(message))}/>          
+          </View>        
+        </KeyboardAvoidingView>
     )
   }
 

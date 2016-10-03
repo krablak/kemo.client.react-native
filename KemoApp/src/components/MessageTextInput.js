@@ -14,15 +14,16 @@ class MessageTextInput extends Component {
       <TextInput
         style={{height: 40, borderColor: '#eeeeee', borderWidth: 1}}
         onSubmitEditing={()=>{
-          onSend(this.state.text);
-          this.setState({text:''});
+          onSend(this.state.text)
+          this.setState({text:''})
         }}
         onChangeText={
           (text) => {
             this.setState({text:text})            
           }
         }
-        value={this.state.text}        
+        value={this.state.text}
+        clearTextOnFocus={true}
       />
     );
   }
