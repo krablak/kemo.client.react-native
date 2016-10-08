@@ -9,10 +9,10 @@ class MessageTextInput extends Component {
   }
   
   render() {
-    const {onSend} = this.props
+    const {onSend,style} = this.props
     return (
-      <TextInput
-        style={{height: 40, borderColor: '#eeeeee', borderWidth: 1}}
+      <TextInput   
+        style={style}
         onSubmitEditing={()=>{
           onSend(this.state.text)
           this.setState({text:''})

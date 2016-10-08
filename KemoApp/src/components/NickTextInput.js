@@ -3,10 +3,10 @@ import { View, TextInput, } from 'react-native'
 
 class NickTextInput extends Component {
   render() {
-    const { value, onChange, placeholder } = this.props
+    const { value, onChange, placeholder,style } = this.props
     return (
-      <TextInput        
-        style={{height: 40, borderColor: '#eeeeee', borderWidth: 1}}
+      <TextInput
+        style={style}
         onChangeText={(text)=>{onChange(text)}}
         placeholder={placeholder}
         value={value}

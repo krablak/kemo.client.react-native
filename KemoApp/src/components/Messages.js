@@ -8,11 +8,18 @@ export class Messages extends Component {
   }
   
   render() {
-    const {dataSource} = this.props
-    return (
+    const {dataSource,style} = this.props
+    return (   
       <ListView
         dataSource={dataSource}
-        renderRow={(rowData) => <Text>{rowData}</Text>}
+        style={style}
+        renderRow={(rowData) => {
+          return (
+            <View>
+              <Text style={{}}>{rowData}</Text>
+            </View>
+          )
+        }}        
       />
     )
   }

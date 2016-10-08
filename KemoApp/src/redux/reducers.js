@@ -14,11 +14,11 @@ export function newReducer(inititialState){
       case KEY_CHANGED.type:
           return Object.assign({}, state, {key:action.key});
       case SEND.type:     
-          let newMessages = state.messages.concat(action.message)
+          let newMessages = state.messages.concat(`[${state.nick}] ${action.message}`)
           return Object.assign({}, state, 
               {
                 messages: newMessages, 
-                ds: state.ds.cloneWithRows([newMessages])
+                ds: state.ds.cloneWithRows(newMessages)
               }
           )
       default:

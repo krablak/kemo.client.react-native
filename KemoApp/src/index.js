@@ -18,11 +18,13 @@ import {newReducer} from "./redux/reducers.js"
 
 // Application initial state
 const initialState = {
-  key: "key",
-  nick: "anal",
+  key: "default",
+  nick: "💩",
   messages: [],
   ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
 }
+
+initialState.ds = initialState.ds.cloneWithRows(["[💩] Wow!","[💩] Nice!","[💩] Love it!","[🐍] Dude!"])
 
 // Action store
 const store = initialCreateStore(newReducer(initialState));
@@ -37,30 +39,42 @@ export class KemoApp extends Component {
   render() {
     return (
         <KeyboardAvoidingView 
-            behavior="height"
+            behavior="padding"
             keyboardVerticalOffset={0}
-            style={{flex: 10, flexDirection: 'column', paddingTop:30}}
+            style={{flex: 1, flexDirection: 'column', paddingTop:30, paddingBottom:30}}
             >
-          <View style={{flex: 1, backgroundColor: 'powderblue'}}>
-            <NickTextInput placeholder="💩" onChange={(nick)=>store.dispatch(NICK_CHANGED.create(nick))}/>
+          <View style={{height: 45, paddingTop: 5}}>
+            <NickTextInput value={store.getState().nick} placeholder="💩" onChange={(nick)=>store.dispatch(NICK_CHANGED.create(nick))} style={styles.field}/>
           </View>
-          <View style={{flex: 1, backgroundColor: 'skyblue'}}>
-            <KeyTextInput placeholder="Place your secret key here..." onChange={(key)=>store.dispatch(KEY_CHANGED.create(key))}/>
+          <View style={{height: 45, paddingTop: 5}}>
+            <KeyTextInput value={store.getState().key} placeholder="Place your secret key here..." onChange={(key)=>store.dispatch(KEY_CHANGED.create(key))} style={styles.field}/>
           </View>
-          <View style={{flex: 6, flexDirection: "column"}}>
-            <Messages dataSource={store.getState().ds}/>
+          <View style={{flex: 6, paddingTop: 5, paddingBottom: 5}}>
+            <Messages dataSource={store.getState().ds} style={styles.messages}/>
           </View>
-          <View style={{flex: 1, backgroundColor: 'red', justifyContent:'flex-end'}}>
-            <MessageTextInput onSend={(message)=>store.dispatch(SEND.create(message))}/>          
+          <View style={{height: 60, paddingTop: 5,paddingBottom: 15}}>
+            <MessageTextInput onSend={(message)=>store.dispatch(SEND.create(message))} style={styles.field}/>          
           </View>        
         </KeyboardAvoidingView>
     )
   }
-
 }
 
-// Dispatch test devel actions
-store.dispatch(RECV.create("Hello 0!"))
-store.dispatch(RECV.create("Hello 1!"))
-store.dispatch(RECV.create("Hello 2!"))
+const styles = StyleSheet.create({
+  field: {
+    height: 40, 
+    borderColor: '#565695', 
+    borderWidth: 0.5,
+    borderRadius: 4,
+    margin: 5,
+    padding: 5
+  },
+  messages: {
+    borderColor: '#efefef',
+    borderWidth: 0.5,
+    borderRadius: 4,
+    margin: 5,
+    padding: 5
+  },
+});
 

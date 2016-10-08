@@ -8,11 +8,13 @@ export class KeyTextInput extends Component {
     this.state = { text: 'default' };
   }
   render() {
+    const {style,value} = this.props
     return (
       <TextInput
-        style={{height: 40, borderColor: '#eeeeee', borderWidth: 1}}
+        style={style}        
         onChangeText={(text) => {this.setState({text})}}
         secureTextEntry={true}
+        value={value}
       />
     );
   }
